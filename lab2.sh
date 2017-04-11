@@ -4,38 +4,37 @@
 #!/bin/bash
 x=1;
 clear
-echo -e "This program check to see if the entered number is larger than 5."
-	
+echo -e "This program check to see if the entered number is even or odd"
 while [ $x -gt 0 ]
 do
         
 # getting the number and check it is number
-     echo  "Enter a number or [q] for QUIT:"
-     read -r user_e 
+      echo  "Enter a number or [q] for QUIT:"
+      read -r user_e 
       if (($(echo "$user_e/1" |bc)  ));then     
-        n=$(echo "scale=2; $user_e/1" |bc -l)
-       echo $n-n
-       r=$(echo "$n%2" |bc )
-       echo $r-r       
+       # n=$(echo "scale=2; $user_e/1" |bc -l)
+#calculate reminder
+        r=$(echo "$user_e%2" |bc )
 #check for zero
-     elif [ "$user_e" = "0" ];then
+      elif [ "$user_e" = "0" ];then
         echo "$user_e is even number"
-         
-     else
+        unset user_e   
+      
 #quit the program
-        if [ "$user_e" = "q" ];then
+      elif [ "$user_e" = "q" ];then
            exit;
-        else
+
+      else
           echo "you entered $user_e. Please enter a number"
-          unset n
-        fi 
-     fi 
+          unset user_e 
+         
+      fi 
 # compare              
-        if [[ -v n ]];then
+        if [[ -v user_e ]];then
             if [ $(echo "$r/1"|bc ) -eq 0 ];then
-              echo "$n even number"
+              echo "$user_e even number"
             else
-              echo "$n is odd number"
+              echo "$user_e is odd number"
             fi
         fi
 done
