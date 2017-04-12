@@ -12,7 +12,8 @@ do
 # getting the number and check it is number
      echo  "Enter a number or [q] for QUIT:"
      read -r user_e 
-     if (($(echo "$user_e/1" |bc) ));then
+     
+      if (($(echo "$user_e/1" |bc) ));then
         n=$(echo "scale=2;$user_e/1" |bc)
         #echo $n  
 #check for zero
