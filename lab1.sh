@@ -16,8 +16,8 @@ do
       if (($(echo "$user_e/1" |bc) ));then
         n=$(echo "scale=2;$user_e/1" |bc)
         #echo $n  
-#check for zero
-     elif [ "$user_e" = "0" ];then
+#check for zero and 0.
+     elif [[ $user_e == .* ]] || [[ $user_e == 0* ]]  ;then
         n=0
      else
 #quit the program
