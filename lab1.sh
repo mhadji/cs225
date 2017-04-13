@@ -13,16 +13,31 @@ do
      echo  "Enter a number or [q] for QUIT:"
      read -r user_e 
      
-      if (($(echo "$user_e/1" |bc) ));then
-        n=$(echo "scale=2;$user_e/1" |bc)
+      if (($(echo "$user_e/1" |bc ) ));then
+        n=$(echo  "scale=2;$user_e/1" |bc)
         #echo $n  
 #check for zero and 0.
      elif [[ $user_e == .* ]] || [[ $user_e == 0* ]]  ;then
         n=0
+#check for + before
+     elif [[ $user_e == +* ]]  ;then
+#eleminate the +       
+        m=${user_e/+/}
+#check again and create n
+       if (($(echo "$m/1" |bc) ));then
+        n=$(echo "scale=2;$m/1" |bc)
+       else
+        echo "you entered $user_e. Please enter a number"
+          unset n
+       fi
+       
+echo $m -m
+echo $n -n
+
      else
 #quit the program
-        if [ "$user_e" = "q" ];then
-           exit;
+     if [ "$user_e" = "q" ];then
+     exit;
         else
           echo "you entered $user_e. Please enter a number"
           unset n

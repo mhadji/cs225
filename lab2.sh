@@ -14,7 +14,7 @@ do
       if (($(echo "$user_e/1" |bc)  ));then     
        n=$(echo "scale=2; $user_e/1" |bc)
 #calculate reminder
-        r=$(echo "scale=0;$n%2" |bc -l )
+        r=$(echo "scale=0;$n/2" |bc -l )
         
      echo $n - n
      echo $r -r 
@@ -32,9 +32,9 @@ do
 # compare              
         if [[ -v n ]];then
             if [ $(echo "$r/1"|bc ) -eq 0 ];then
-              echo "$user_e even number"
+              echo "You entered $user_e and it's an even number"
             else
-              echo "$user_e is odd number"
+              echo "You entered $user_e and it's an odd number"
             fi
         fi
 done
