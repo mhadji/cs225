@@ -12,14 +12,12 @@ do
 # getting the number and check it is number
      echo  "Enter a number or [q] for QUIT:"
      read -r user_e 
-    
 #check for zero 
     if  [[ $user_e == 0 ]]  ;then
         n=0
 #check for  0.
     elif [[ $user_e == .* ]] ||  [[ $user_e == 0.* ]] ;then
         n=0
-
 #check for + before
     elif [[ $user_e == +* ]]  ;then
 #eleminate the +
@@ -31,9 +29,8 @@ do
            echo "you entered $user_e. Please enter a number"
            unset n
          fi
-   
-echo $m -m
-echo $n -n+
+#echo $m -m
+#echo $n -n+
 #quit the program
     elif [ "$user_e" = "q" ];then
         exit;
@@ -41,7 +38,6 @@ echo $n -n+
       #check for number
        if (($(echo "$user_e/1" |bc ) ));then
         n=$(echo  "scale=2;$user_e/1" |bc)
-        echo $n -number
        else
         echo "you entered $user_e. Please enter a number"
          unset n
