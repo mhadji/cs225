@@ -31,6 +31,10 @@ do
          fi
 #echo $m -m
 #echo $n -n+
+#check for numbers and letters
+    elif [[ $(echo $user_e | grep -E [a-z]) ]] && [ "$user_e" != "q" ] ;then
+      echo "you entered $user_e. Please enter a number"
+      unset n
 #quit the program
     elif [ "$user_e" = "q" ];then
         exit;
