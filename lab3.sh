@@ -16,9 +16,8 @@ else
       else
 #Get the users home directory from /etc/passwd
         userhome=$(awk -v uid=$UID -F":" '{ if($3==uid){print $6} }' /etc/passwd)
-        echo "user home directory is $userhome" 
-#Display the size of their home directory
-        userhomesize=$(du --max-depth=0  /home/majid/ | cut -f1 )        
+ #Display the size of their home directory
+        userhomesize=$(du --max-depth=0  $userhome | cut -f1 )        
         echo "user home directory size is $userhomesize kb " 
       fi 
    else 
