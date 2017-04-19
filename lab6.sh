@@ -69,7 +69,7 @@ n=0
 
   medial=$(cat medialistfromxml.txt)
   for i in $medial ;do
-    if  grep -Fxq "$i" medialistfromfolder.txt  ;then
+    if ! grep -Fxq "$i" medialistfromfolder.txt  ;then
          echo "$i"  >>"lab6_result.txt"
          let n+=1
     fi
