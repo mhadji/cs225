@@ -3,21 +3,24 @@
 # 
 
 #!/bin/bash
-
-#loop through the items in medialist.txt
-LIST=$(cat medialab/medialist.txt)  
+#delete old  the files if they exist
+FILELIST="foundfiles.txt lostfiles.txt"   
+for FILE in $FILELIST ; do 
+   if [ -f $FILE ]; then
+   rm -f $FILE
+   fi 
+done
+#search function - search through media folder and add result to two files
 search() {
-  echo $1
+if [[ $(find medialab -name "$1" |wc -l) -gt 0 ]] ;then
+   echo "$i" >>"foundfiles.txt"
+else
+    echo "$i" >> "lostfiles.txt"
+fi
 }
-
+#loop through the items in medialist.txt and pass each line to search function
+LIST=$(cat medialab/medialist.txt)  
 for i in $LIST ;do
-   #echo"$i"
    search "$i"
   done
 
-#Check to see if each item exists in the medialab directory search() {   echo"$1"}
-
-
-#If it does output the name to a new file called foundfiles.txt
-
-#if it doesn't output the name to a new file called lostfiles.txt
