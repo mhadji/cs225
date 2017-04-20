@@ -12,13 +12,13 @@ for FILE in $FILELIST ; do
 done
 #list the media filenames in the medialab folder and XML file in two seprate files  
 LISTFROMMEDIAFOLDER=$(find medialab)
-LISTFROMXML=$( grep '<field name="filename">' medialab/media.xml |grep -v  '<field name="filename"></field>' | grep -v 'NULL')  
+LISTFROMXML=$(grep -E '.mp3|.mpg' medialab/media.xml )  
 
 for i in $LISTFROMXML ;do
     i=${i%<*};  i=${i#*>}
-    if [[ $i  ]];then
+    #if [[ $i  ]];then
     echo "$i" >>"medialistfromxml.txt"
-    fi
+    #fi
 done
 for i in $LISTFROMMEDIAFOLDER ;do
      i=${i#*/} 
@@ -69,14 +69,14 @@ n=0
 
   medial=$(cat medialistfromxml.txt)
   for i in $medial ;do
-    if ! grep -Fxq "$i" medialistfromfolder.txt  ;then
+    if ! grep -Fxq "$i"  medialistfromfolder.txt  ;then
          echo "$i"  >>"lab6_result.txt"
          let n+=1
     fi
   done
    echo "$n media files in media.xml that are NOT in medialab directory"  >>"lab6_result.txt"
   else
-   echo"error in progrom - medialistfromxml.txt "
+   echo "error in progrom - medialistfromxml.txt "
    exit 1
 
 fi
