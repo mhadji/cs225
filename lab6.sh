@@ -79,5 +79,7 @@ n=0
    echo "error in progrom - medialistfromxml.txt "
    exit 1
 
+
 fi
 
+cat lab6_result.txt
