@@ -1,0 +1,17 @@
+#Authot = majid hadji , 4/28/2017 , lab8 cs225 edmonds CC
+#using the last line of /var/share/CS225/addresses.csv gather each field into the following variables using bash pattern substitution.  Echo the results back onto the screen all in lower case. Do NOT use awk or tr for this!
+
+#!/bin/bash
+
+LIST=$(cat addresses.csv)
+
+unset lastline
+while read line; do
+    if  [ -z "$lastline" ]; then
+   
+        echo "$lastline"
+    fi
+       lastline=$line
+done <<< "$LIST"
+
+        echo "$lastline"
