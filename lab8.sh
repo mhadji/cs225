@@ -19,26 +19,26 @@ fi
 done <<< "$LIST"
 
      lastline=${lastline//'"'/} 
-     lastline=${lastline//' '/} 
+#     lastline=${lastline//' '/} 
 #echo $lastline
 
 OLDIFS=$IFS
-IFS=" , "
-while read FNAME  LNAME COMPANY STREET CITY  STATE  STATEABR ZIP HPHONE WPHONE  EMAIL WEBURL
+#IFS=" , "
+while IFS=,  read  FNAME  LNAME COMPANY STREET CITY  STATE  STATEABR ZIP HPHONE WPHONE  EMAIL WEBURL
 
  do
-   echo -e "FNAME :\t $FNAME\n\
-LNAME :\t $LNAME\n\
-COMPANY :\t $COMPANY\n\
-STREET :\t $STREET\n\
-CITY :\t $CITY\n\
-STATE  :\t $STATE\n\
-STATEABR :\t $STATEABR\n\
-ZIP :\t $ZIP\n\
+   echo -e "FNAME :\t ${FNAME,,}\n\
+LNAME :\t ${LNAME,,}\n\
+COMPANY :\t ${COMPANY,,}\n\
+STREET :\t ${STREET,,}\n\
+CITY :\t ${CITY,,}\n\
+STATE  :\t ${STATE,,}\n\
+STATEABR :\t ${STATEABR,,}\n\
+ZIP :\t ${ZIP,,}\n\
 HPHONE :\t $HPHONE\n\
 WPHONE :\t $WPHONE\n\
-EMAIL :\t $EMAIL\n\
-WEBURL :\t $WEBURL\n"
+EMAIL :\t ${EMAIL,,}\n\
+WEBURL :\t ${WEBURL,,}\n"
 
  done <<< $lastline
 IFS=$OLDIFS
