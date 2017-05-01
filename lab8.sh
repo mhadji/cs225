@@ -10,35 +10,28 @@ unset lastline
 
 
 while read line; do
-    if  [  -z "$lastline" ]; then
-   
-        echo "$lastline" 
-    
-fi
        lastline=$line
 done <<< "$LIST"
 
      lastline=${lastline//'"'/} 
-#     lastline=${lastline//' '/} 
-#echo $lastline
 
 OLDIFS=$IFS
 #IFS=" , "
 while IFS=,  read  FNAME  LNAME COMPANY STREET CITY  STATE  STATEABR ZIP HPHONE WPHONE  EMAIL WEBURL
 
  do
-   echo -e "FNAME :\t ${FNAME,,}\n\
-LNAME :\t ${LNAME,,}\n\
-COMPANY :\t ${COMPANY,,}\n\
-STREET :\t ${STREET,,}\n\
-CITY :\t ${CITY,,}\n\
-STATE  :\t ${STATE,,}\n\
-STATEABR :\t ${STATEABR,,}\n\
-ZIP :\t ${ZIP,,}\n\
-HPHONE :\t $HPHONE\n\
-WPHONE :\t $WPHONE\n\
-EMAIL :\t ${EMAIL,,}\n\
-WEBURL :\t ${WEBURL,,}\n"
+   echo -e "FNAME:   ${FNAME,,}\n\
+LNAME:   ${LNAME,,}\n\
+COMPANY: ${COMPANY,,}\n\
+STREET:  ${STREET,,}\n\
+CITY:    ${CITY,,}\n\
+STATE:   ${STATE,,}\n\
+STATEABR:${STATEABR,,}\n\
+ZIP:     ${ZIP,,}\n\
+HPHONE:  $HPHONE\n\
+WPHONE:  $WPHONE\n\
+EMAIL:   ${EMAIL,,}\n\
+WEBURL:  ${WEBURL,,}\n"
 
  done <<< $lastline
 IFS=$OLDIFS
