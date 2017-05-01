@@ -3,4 +3,6 @@
 
 #!/bin/bash
 #take first argument 
-echo $(basename $1)   
+echo "Using Basename - "$(basename $1) 
+ i=${1##*/}
+echo  "using pattern matching -" "$i"
