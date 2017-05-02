@@ -6,4 +6,3 @@
 echo "Using Basename - "$(basename $1) 
  i=${1%/}; i=${i##*/}
 echo  "using pattern matching -" "$i"
-echo "1\2"
