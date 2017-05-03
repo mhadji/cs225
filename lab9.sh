@@ -33,9 +33,9 @@ fi
         echo -e "the options:\n\
         -d - turns on debugging
         -v - sets the VERBOSE variable to true
-        -h - prints out a help message with the name of the script (and no path information) plus the options
+        -h - prints out a help message with the name of the script 
         -n <name> - takes a name argument and prints a message on the screen
-        -l <dir> - have it list the directory using a for loop or ls (ask yes/no before proceeding)";;
+        -l <dir> - have it list the directory ";;
    -n)  echo "Heloo $2";;
    #-n <name> - takes a name argument and prints a message on the screen
         
