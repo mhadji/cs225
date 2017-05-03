@@ -17,9 +17,7 @@
 if [ -z $1 ]; then
   echo "Script take argument.Here is some help"
   arg=-h
-elif [ -n $1 ]
-then
-# otherwise make first arg as a rental
+else
   arg=$1
 fi
 
