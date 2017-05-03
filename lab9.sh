@@ -20,8 +20,8 @@ if [ -z $1 ]; then
 else
   arg=$1
 fi
-
    case "$arg" in
+
    -d) echo "Option -d turns on debugging" 
     # -d - turns on debugging (set -x)
        set -x;;
@@ -39,9 +39,15 @@ fi
    -n)  echo "Heloo $2";;
    #-n <name> - takes a name argument and prints a message on the screen
         
-   -l) echo "option -l "
+   -l)  echo "Are you sure? Please Enter y for yes and n for no - "
+      read response
    # -l <dir> - have it list the directory using a for loop or ls (ask yes/no before proceeding)
-  ls "$2" ;;
+     if [ "$response" = "y" ]; then
+       ls "$2";
+       exit ;
+     else 
+       exit ;
+     fi ;;
+ 
    *) echo "$1 is not an option";;
    esac
- 
