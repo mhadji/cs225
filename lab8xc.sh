@@ -3,6 +3,6 @@
 #if the first doesn't exist and set a default value of 10 if the second doesn't exist.
 
 #!/bin/bash
- echo  "The first argument is ${1:?"You need at least one argument."} and the Second argument is ${2:-10}." 
+ echo  "The first argument is  ${1:?"You need at least one argument."} and the Second argument is ${2:-10}." 
 
 
