@@ -12,15 +12,8 @@
 # 3-Puts all additional arguments in $1 $2 etc
 
 #!/bin/bash
-# if no command line arg given
-# set rental to Unknown
-if [ -z $1 ]; then
-  echo "Script take argument.Here is some help"
-  arg=-h
-else
-  arg=$1
-fi
-   case "$arg" in
+
+   case "$1" in
 
    -d) echo "Option -d turns on debugging" 
     # -d - turns on debugging (set -x)
@@ -49,5 +42,8 @@ fi
        exit ;
      fi ;;
  
-   *) echo "$1 is not an option";;
+   *) echo "You entered wrong argument or maybe no argument at all.
+    Here is some help you can use."
+     bash $0 -h
+     ;;
    esac
