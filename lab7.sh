@@ -3,6 +3,12 @@
 
 #!/bin/bash
 #take first argument 
+
+#if for handeling /
 echo "Using Basename - "$(basename $1) 
+if [ "$1" = "/" ] ; then
+echo  "using pattern matching -" "$1"
+else
  i=${1%/}; i=${i##*/}
 echo  "using pattern matching -" "$i"
+fi
