@@ -9,6 +9,6 @@ echo "Using Basename - "$(basename $1)
 if [ "$1" = "/" ] ; then
 echo  "using pattern matching -" "$1"
 else
- i=${1%/}; i=${i##*/}
+i=$(echo "$1" |sed 's#/*$##;s#^/*##') ; i=${i##*/}
 echo  "using pattern matching -" "$i"
 fi
