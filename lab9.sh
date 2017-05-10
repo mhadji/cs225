@@ -49,8 +49,6 @@ while getopts ":d,:v,:h,:n:,:l:" opt; do
       ;;
        
    esac
-
-
-   done
+  done
    shift $(($OPTIND -1))
-   echo "$1 - $9"
+ 
