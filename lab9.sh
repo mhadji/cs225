@@ -31,7 +31,7 @@ while getopts ":d,:v,:h,:n:,:l:" opt; do
             -h - prints out a help message with the name of the script 
             -n <name> - takes a name argument and prints a message on the screen
             -l <dir> - have it list the directory ";;
-      n)  echo "Heloo $OPTARG";;
+      n)  echo "Helloo $OPTARG";;
       #-n <name> - takes a name argument and prints a message on the screen
             
       l)  echo "Are you sure? Please Enter y for yes and n for no - "
@@ -47,6 +47,10 @@ while getopts ":d,:v,:h,:n:,:l:" opt; do
      :) echo "Option -$OPTARG requires an argument." 
       exit 1
       ;;
+       
    esac
- 
+
+
    done
+   shift $(($OPTIND -1))
+   echo "$1 - $9"
