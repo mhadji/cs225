@@ -21,8 +21,8 @@ echo "Script should list all files one per line in the entire OS ,
   tempfile=`mktemp lab10_file_list.XXXXXX`
  echo "This script writes to temp file $tempfile"
  #Make list of files in OS
- LIST=$(find .) #for local test
- #LIST=$(find \)
+ #LIST=$(find .) #for local test
+ LIST=$(find \)
 #creat linenumber
  linenumber=1
 #reding the list and write it tempfile
