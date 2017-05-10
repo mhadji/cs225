@@ -13,7 +13,8 @@
 
 #!/bin/bash
 error=$1
-echo ${error:?"Option required"}
+echo ${error:?"s $(bash $0 -h)"}
+
 while getopts ":d,:v,:h,:n:,:l:" opt; do
    case "$opt" in
 
