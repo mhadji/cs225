@@ -17,23 +17,15 @@ copy(){
          if [ "$2" -eq 0 ];then
             #Copy each file to the appropriate directory 
             cp -r $1 lab11/$MONTH/$DAY
-            echo -n "copy $1 "
+            echo  "copy $1 to lab11/$MONTH/$DAY"
         else 
             #moves each file to the appropriate directory if -f (force) is set
             mv $1 lab11/$MONTH/$DAY
-            echo -n "move the file"
+            echo "move $1 to lab11/$MONTH/$DAY "
         fi
       
   }
-  #moves each file to the appropriate directory if -f (force) is set
-#   move(){
-#        sleep 2
-#         D=$(stat -c%y  timefiles/file-12.txt | cut -d'.' -f1)
-#         ts $D
-#         mkdir -p lab11/$MONTH/$DAY
-#         #mv timefiles/file-12.txt lab11/$MONTH/$day
-#         echo -n "copy the file"
-#    }
+ 
  list(){
     #make list of files in timefiles directory
     LIST=$(find timefiles -name "*.*")
