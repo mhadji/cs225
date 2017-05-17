@@ -11,17 +11,19 @@ source  functionLibrary.sh
 trap ctrl_c SIGINT SIGTERM
 #Copy or move each file to the appropriate directory 
 copy(){
-        D=$(stat -c%y  $1 | cut -d'.' -f1)
-        ts $D
-        mkdir -p lab11/$MONTH/$DAY
+        #Getting modified timestamp of each file in timefiles
+        DATE=$(stat -c%y  $1 | cut -d'.' -f1)
+        ts $DATE
+        DIS=lab11/$YEAR/$MONTH/$DAY
+        mkdir -p $DIS
          if [ "$2" -eq 0 ];then
             #Copy each file to the appropriate directory 
-            cp -r $1 lab11/$MONTH/$DAY
-            echo  "copy $1 to lab11/$MONTH/$DAY"
+            cp -r $1 $DIS
+            echo  "copy $1 to $DIS"
         else 
             #moves each file to the appropriate directory if -f (force) is set
-            mv $1 lab11/$MONTH/$DAY
-            echo "move $1 to lab11/$MONTH/$DAY "
+            mv $1 $DIS
+            echo "move $1 to $DIS"
         fi
       
   }

@@ -16,6 +16,7 @@ ctrl_c(){
 ts() {    
 DAY=$(date -d "$1" '+%d')
 MONTH=$(date -d "$1" '+%m')
+YEAR=$(date -d "$1" '+%Y')
 
 # echo $1
 # echo $DAY
