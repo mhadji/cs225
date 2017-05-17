@@ -7,7 +7,7 @@
 # moves each file to the appropriate directory if -f (force) is set
 
 #!/bin/bash
-source  myFnLib.sh
+source  functionLibrary.sh
 trap ctrl_c SIGINT SIGTERM
 #Copy or move each file to the appropriate directory 
 copy(){
