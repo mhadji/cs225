@@ -38,7 +38,8 @@ copy(){
  
  list(){
     #make list of files in timefiles directory
-    if [ $(find  timefiles -name "*.*") ];then
+    #check if directory exists and has content
+    if find "timefiles" -mindepth 1 -print -quit | grep -q .; then
       LIST=$(find timefiles -name "*.*")
     # echo $LIST >test.txt 
     #loop through the items in timefiles and pass each line to copy function
@@ -50,7 +51,7 @@ copy(){
             fi
         done
     else
-     echo "original folder is empty"
+     echo "original folder is empty or not exist."
     fi
 }
 
