@@ -1,20 +1,15 @@
 #Authot = majid hadji , 5/17/2017 , lab11 cs225 edmonds CC
 #building a function library
 
-# looks at the modified timestamp of each file in timefiles
-# creates a directory structure for the month and day in your home directory
-# copies each file to the appropriate directory
-# moves each file to the appropriate directory if -f (force) is set
-
 #!/bin/bash
 source  functionLibrary.sh
 trap ctrl_c SIGINT SIGTERM
 #Copy or move each file to the appropriate directory 
 copy(){
         #Getting modified timestamp of each file in timefiles
-        DATE=$(stat -c%y  $1 | cut -d'.' -f1)
+        DATE=$(stat -c%y  $1 )
         ts $DATE
-        DIS=lab11/$YEAR/$MONTH/$DAY
+        DIS=lab11/$MONTH/$DAY
         mkdir -p $DIS
          if [ "$2" -eq 0 ];then
             #Copy each file to the appropriate directory 
@@ -25,8 +20,7 @@ copy(){
             mv $1 $DIS
             echo "move $1 to $DIS"
         fi
-      
-  }
+    }
  
  list(){
     #make list of files in timefiles directory

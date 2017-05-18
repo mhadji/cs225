@@ -2,17 +2,15 @@
 
 # trap ctrl-c and call ctrl_c()
 
- D=$(stat -c%y timefiles/IMG_0528  | cut -d'.' -f1)
+ D=$(stat -c%y timefiles/file-83.txt )
 ts() {    
-DAY=$(date -d "$1" '+%d')
-MONTH=$(date -d "$1" '+%m')
-YEAR=$(date -d "$1" '+%Y')
-echo $YEAR
+DAY=$(date -d "$D" '+%d')
+MONTH=$(date -d "$D" '+%m')
+YEAR=$(date -d "$D" '+%Y')
+
 }
 
-myMkdir(){
-    mkdir -p $1
-  }
 ts
-myMkdir lab11/$MONTH/$Day
+echo "$YEAR/$MONTH/$DAY"
+echo $D
 
