@@ -7,49 +7,66 @@ trap ctrl_c SIGINT SIGTERM
 #Copy or move each file to the appropriate directory 
 copy(){
         #Getting modified timestamp of each file in timefiles
-        DATE=$(stat -c%y  $1 )
-        ts $DATE
-        DIS=lab11/$MONTH/$DAY
-        mkdir -p $DIS
-         if [ "$2" -eq 0 ];then
+       #check if file exists
+         if [ $(find  "$1") ];then
+            DATE=$(stat -c%y  $1 )
+            ts $DATE # $MONTH and $DAY will be created in ts function
+          if [ -z "$MONTH" ] && [ -z "$DAY" ] ;then
+            echo "Somthing went wrong.No date found"
+            exit
+         else 
+          DIS=lab11/$MONTH/$DAY
+          mkdir -p $DIS
+         fi
+       else
+            echo "$1 not found"
+       fi 
+    
+        if [ "$2" -eq 0 ];then
             #Copy each file to the appropriate directory 
             cp -r $1 $DIS
             echo  "copy $1 to $DIS"
+        elif [ "$2" -eq 1 ];then
+           #moves each file to the appropriate directory if -f (force) is set
+           mv $1 $DIS
+           echo "move $1 to $DIS"  
         else 
-            #moves each file to the appropriate directory if -f (force) is set
-            mv $1 $DIS
-            echo "move $1 to $DIS"
+           echo "wrong"
+           exit
         fi
     }
  
  list(){
     #make list of files in timefiles directory
-    LIST=$(find timefiles -name "*.*")
-    echo $LIST >test.txt 
+    if [ $(find  timefiles -name "*.*") ];then
+      LIST=$(find timefiles -name "*.*")
+    # echo $LIST >test.txt 
     #loop through the items in timefiles and pass each line to copy function
-    for i in $LIST ;do
-        if [ "$1" = "-z" ];then
-        copy $i 0
-        else
-        copy $i 1
-        fi
-    done
+        for i in $LIST ;do
+            if [ "$1" = "-z" ];then
+            copy $i 0
+            else
+            copy $i 1
+            fi
+        done
+    else
+     echo "original folder is empty"
+    fi
 }
 
 if [ -z "$1" ];then
-   echo "No option"
+   echo "No -f fource option. Copy each file to the appropriate directory."
    list -z
 fi
 
 while getopts ":f,:h" opt; do
    case "$opt" in
-      f)  echo "Starting ..."
-           list -f;;
+      f)  confirm "Are you sure.All files will be moved ? Please Enter y for yes and n for no - "  list -f ;;      
       #moves each file to the appropriate directory if -f (force) is set
-      h) echo "Script name - $0"
-      #-h - prints out a help message 
-            echo -e "Script creates a directory structure for the month and day in your home directory,copies each file to the appropriate directory, or moves each file to the appropriate directory if -f (force) is set.";;
-     \?) echo "You entered wrong argument. Here is some help you can use."
+      h) myHelp "script name- $0" "Script creates a directory structure for the month and day in your home directory,copies each file
+       to the appropriate directory, or moves each file to the appropriate directory if -f \(force) is set.";;
+           #-h - prints out a help message 
+      \?) myHelp "You entered wrong argument. Here is some help you can use."
         bash $0 -h
         ;;    
    esac
