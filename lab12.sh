@@ -2,15 +2,15 @@
 # Create a script with a pseudo multi-dimensional array
 
 #!/bin/bash
+OLDIFS=$IFS
 source  functionLibrary.sh
 trap ctrl_c SIGINT SIGTERM
-declare -a LIST=$(cat addresses.csv)
-lineCount=$(cat addresses.csv |wc -l)
- echo ${#LIST[@]} 
- OLDIFS=$IFS
+IFS=$'\n'
+LIST=($(cat addresses.csv))
+lineCount=${#LIST[@]} 
 # reading each item/line
-while read item; do
-       # reading items from each line   
+for row in ${LIST[@]} ;do
+ # reading items from each line   
         while IFS=,  read  FNAME  LNAME COMPANY ADDRESS CITY COUNTY STATE  ZIP PHONE FAX  EMAIL WEBURL; do       
              FNAME_arr+=("${FNAME}") 
              LNAME_arr+=("${LNAME}")
@@ -24,8 +24,8 @@ while read item; do
              FAX_arr+=("$FAX")
              EMAIL_arr+=("${EMAIL}")
              WEBURL_arr+=("${WEBURL}")
-        done <<< $item
-done <<< "$LIST"
+        done <<< $row
+done 
 IFS=$OLDIFS
 COUNT=0
 while [ $COUNT -lt $lineCount ] ;do
@@ -34,7 +34,7 @@ ${COMPANY_arr[$COUNT]},${ADDRESS_arr[$COUNT]},\
 ${CITY_arr[$COUNT]},${COUNTY_arr[$COUNT]},\
 ${STATE_arr[$COUNT]},${ZIP_arr[$COUNT]},\
 ${PHONE_arr[$COUNT]},${FAX_arr[$COUNT]},\
-${EMAIL_arr[$COUNT]},${WEBURL_arr[$COUNT]}" 
+${EMAIL_arr[$COUNT]},${WEBURL_arr[$COUNT]}"
  
  COUNT=$[$COUNT + 1]
  done
