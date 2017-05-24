@@ -1,16 +1,10 @@
 #!/bin/bash
 
-# trap ctrl-c and call ctrl_c()
+
+source  functionLibrary.sh
 
  D=$(stat -c%y timefiles/file-83.txt )
-ts() {    
-DAY=$(date -d "$D" '+%d')
-MONTH=$(date -d "$D" '+%m')
-YEAR=$(date -d "$D" '+%Y')
-
-}
-
-ts
-echo "$YEAR/$MONTH/$DAY"
-echo $D
+res="ts $D"
+#echo $DAY
+#echo $res
 

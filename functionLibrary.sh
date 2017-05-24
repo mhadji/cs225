@@ -19,8 +19,8 @@ DAY=$(date -d "$1" '+%d')
 MONTH=$(date -d "$1" '+%m')
 YEAR=$(date -d "$1" '+%Y')
 fi
-# echo $1
-# echo $DAY
+ echo $1
+ echo $DAY
 # echo $MONTH
 }
 
