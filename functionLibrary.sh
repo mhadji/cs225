@@ -69,14 +69,13 @@ echo $1
 # Argument:
 #   $1 -> email addresses
 ##################################################################
-check_email(){
+Compare_regex(){
 # Check only for allowed characters in email addresses
-regex="^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$" 
-email=$1
-if [[ "$email" =~ $regex ]] ; then
-   echo "'$email' is a valid email."
+
+if [[ "$1" =~ $2 ]] ; then
+    return 0
 else
-   echo "'$email' is not a valid email."
+   return 1
 fi
 }
 
@@ -87,9 +86,15 @@ fi
 ##################################################################
 check_pn(){
 # Phone number can be international format or just US - your choice.
-echo "pn"
-} 
+if [[ "$1" =~ ^(([0-9]( |-))?[0-9]{3,3} +|([0-9]( |-))?\([0-9]{3,3}\) *)?[0-9]{3,3}( |-)[0-9]{4,4}$ ]]; then
+    echo "TELEPHONE NUMBER (USA)"
+    echo "is"$1
+    else
+      echo "NOT"$1
+   
+fi
 
+}
 ##################################################################
 # Purpose: check the validity of credit card numbers, based on each particular data format.
 # Argument:
