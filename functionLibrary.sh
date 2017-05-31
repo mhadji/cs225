@@ -52,3 +52,28 @@ myHelp(){
 echo "$1"
 echo "$2"
 }
+
+
+
+check_ip(){
+# IP address should handle 0.0.0.0 to 255.255.255.255 but nothing else.
+echo $1
+}
+check_email(){
+# Check only for allowed characters in email addresses
+regex="^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$" 
+email=$1
+if [[ "$email" =~ $regex ]] ; then
+   echo "'$email' is a valid email."
+else
+   echo "'$email' is not a valid email."
+fi
+}
+check_pn(){
+# Phone number can be international format or just US - your choice.
+echo "pn"
+} 
+check_ccn(){
+# Credit card number should match all major cards - VISA, Mastercard, Discover, AMEX
+echo "ccn"
+}

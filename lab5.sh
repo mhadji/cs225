@@ -1,4 +1,4 @@
-#Authot = majid hadji , 4/19/2017 , lab5 cs225 edmonds CC
+#Author = majid hadji , 4/19/2017 , lab5 cs225 edmonds CC
 #Loop through data and act on each entry
 # 
 
