@@ -34,35 +34,34 @@ do
          
 #email addresses
          
-	 if [ "$user_i" = "1" ];then
+          if [ "$user_i" = "1" ];then
               echo "Enter your email address."
               read  user_s
-             check_email $user_s
-     fi
+              check_email $user_s
+          fi
 
 #Credit card numbers	     	  
        	 if [ "$user_i" = "2" ];then
-              echo "Enter your Credit card number."
-              read  user_s
-              check_ccn $user_s
+             echo "Enter your Credit card number."
+             read  user_s
+             check_ccn $user_s
          fi
 #telephone numbers
          if [ "$user_i" = "3" ];then
-              echo "Enter your telephone number."
-              read  user_s
-              check_pn $user_s
+             echo "Enter your telephone number."
+             read  user_s
+             check_pn $user_s
          fi
 #help
           if [ "$user_i" = "h" ];then
-          # Make sure the script prints out help if no argument is given.
-          myHelp 'This script check the validity of email addresses, telephone numbers, IP addresses and credit card numbers.'
-          exit 0
+             myHelp 'This script check the validity of email addresses, telephone numbers, IP addresses and credit card numbers.'
+             exit 0
           fi         
 #quit
           if [ "$user_i" = "q" ]; then
               echo "Good Bye!!!"
-             exit 0
-           fi
+              exit 0
+          fi
 
 
 

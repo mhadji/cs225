@@ -54,11 +54,21 @@ echo "$2"
 }
 
 
-
+##################################################################
+# Purpose: check the validity of IP addresses, based on each particular data format.
+# Argument:
+#   $1 ->IP addresses
+##################################################################
 check_ip(){
 # IP address should handle 0.0.0.0 to 255.255.255.255 but nothing else.
 echo $1
 }
+
+##################################################################
+# Purpose: check the validity of email addresses, based on each particular data format.
+# Argument:
+#   $1 -> email addresses
+##################################################################
 check_email(){
 # Check only for allowed characters in email addresses
 regex="^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$" 
@@ -69,10 +79,22 @@ else
    echo "'$email' is not a valid email."
 fi
 }
+
+##################################################################
+# Purpose: check the validity of telephone numbers, based on each particular data format.
+# Argument:
+#   $1 ->telephone numbers
+##################################################################
 check_pn(){
 # Phone number can be international format or just US - your choice.
 echo "pn"
 } 
+
+##################################################################
+# Purpose: check the validity of credit card numbers, based on each particular data format.
+# Argument:
+#   $1 ->credit card numbers
+##################################################################
 check_ccn(){
 # Credit card number should match all major cards - VISA, Mastercard, Discover, AMEX
 echo "ccn"
