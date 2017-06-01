@@ -20,7 +20,7 @@ checkPoints=( check_email check_ccn check_ip check_pn )
  for f in "${checkPoints[@]}"
    do
       if  ($f $1);then 
-          echo ""
+          #echo ""          
        fi       
  done  
       
