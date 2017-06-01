@@ -33,7 +33,7 @@ clear
          if [ "$user_i" = "1" ];then
               echo "Enter your email address."
               read  user_s
-              if  (Compare_regex $user_s "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$" );then 
+              if  (check_email $user_s);then 
                 echo "$user_s is a valid email."
               else
                  echo "$user_s is a not valid email."
@@ -43,19 +43,25 @@ clear
 #Credit card numbers	     	  
        	 if [ "$user_i" = "2" ];then
              echo "Enter your Credit card number."
-             read  user_s
+             read  user_s 
+             check_ccn $user_s
+            # if   (check_ccn $user_s );then 
+            #     echo "$user_s is a valid Credit card number."
+            # else
+            #      echo "$user_s is a not valid Credit card number."
+            # fi
             
          fi
 #telephone numbers
        if [ "$user_i" = "3" ];then
               echo "Enter your telephone number in this format(xxx)xxx-xxxx."
               read  user_s
-              if  (Compare_regex $user_s "^(([0-9]( |-))?[0-9]{3,3} +|([0-9]( |-))?\([0-9]{3,3}\) *)?[0-9]{3,3}( |-)[0-9]{4,4}$");then 
-                echo "$user_s is a valid US telephone number."
+              if   (check_pn $user_s );then 
+                echo "$user_s is a valid Credit card number."
               else
-                 echo "$user_s is a not valid US telephone number."
-            fi
-          fi
+                 echo "$user_s is a not valid Credit card number."
+              fi
+      fi
 #help
           if [ "$user_i" = "h" ];then
              myHelp 'This script check the validity of email addresses, telephone numbers, IP addresses and credit card numbers.'

@@ -69,10 +69,10 @@ echo $1
 # Argument:
 #   $1 -> email addresses
 ##################################################################
-Compare_regex(){
+check_email(){
 # Check only for allowed characters in email addresses
 
-if [[ "$1" =~ $2 ]] ; then
+if [[ "$1" =~ ^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$ ]] ; then
     return 0
 else
    return 1
@@ -101,6 +101,23 @@ fi
 #   $1 ->credit card numbers
 ##################################################################
 check_ccn(){
-# Credit card number should match all major cards - VISA, Mastercard, Discover, AMEX
-echo "ccn"
+         cn=${1// /}
+         echo $cn
+if [[ $1 =~ ^[0-9]{16,16}|([0-9]{4,4} ?){4,4}$ ]]; then
+    echo "CREDIT CARD NUMBER"
+    # remove spaces from credit card number
+  
+#    echo ""
+    if [[ $cn =~ ^4[0-9]{6,}$ ]]; then
+	echo "PROBABLE VISA CARD (VISA CARD START WITH 4)";
+    fi
+    if [[ $cn =~ ^5[1-5][0-9]{5,}$ ]]; then
+	echo "PROBABLE MASTER CARD  (MASTER CARD START WITH 5)";
+    fi
+    if [[ $cn =~ ^3[4-7][0-9]{5,}$ ]]; then
+	echo "PROBABLE AMEX  (AMEX START WITH 5)";
+    fi
+    else
+       echo "NOT A CREDIT CARD NUMBER"
+fi
 }
