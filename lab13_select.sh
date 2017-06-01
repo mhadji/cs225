@@ -34,7 +34,7 @@ clear
               echo "Enter your email address."
               read  user_s
               if  (check_email $user_s);then 
-                echo "$user_s is a valid email."
+                 echo ""
               else
                  echo "$user_s is a not valid email."
             fi
@@ -52,7 +52,7 @@ clear
               echo "Enter your telephone number in this format(xxx)xxx-xxxx."
               read  user_s
               if   (check_pn $user_s );then 
-                echo "$user_s is a valid US phone number."
+                echo ""
               else
                  echo "$user_s is a not valid US phone number."
               fi
@@ -62,7 +62,7 @@ clear
               echo "Enter your IP address."
               read  user_s
               if   (check_ip $user_s );then 
-                echo "$user_s is a valid IP addresses."
+                 echo ""
               else
                  echo "$user_s is a not valid IP addresses.IP must be between 0.0.0.0 and 255.255.255.255"
               fi

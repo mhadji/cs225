@@ -62,12 +62,14 @@ echo "$2"
 check_ip(){
 # IP address should handle 0.0.0.0 to 255.255.255.255 but nothing else.
 if [[ "$1" =~ ^([0-9]|[1-9][0-9]|1([0-9][0-9])|2([0-4][0-9]|5[0-5]))\.([0-9]|[1-9][0-9]|1([0-9][0-9])|2([0-4][0-9]|5[0-5]))\.([0-9]|[1-9][0-9]|1([0-9][0-9])|2([0-4][0-9]|5[0-5]))\.([0-9]|[1-9][0-9]|1([0-9][0-9])|2([0-4][0-9]|5[0-5]))$ ]] ; then
+   echo "$1 is a valid IP."
     return 0
-else
+ else
+#    echo "$1 is Not a valid IP."
    return 1
 fi
 }
-}
+
 
 ##################################################################
 # Purpose: check the validity of email addresses, based on each particular data format.
@@ -78,8 +80,10 @@ check_email(){
 # Check only for allowed characters in email addresses
 
 if [[ "$1" =~ ^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$ ]] ; then
+    echo "$1 is a valid email address."
     return 0
-else
+ else
+#    echo "$1 is not a valid email address."
    return 1
 fi
 }
@@ -92,8 +96,10 @@ fi
 check_pn(){
 # Phone number can be international format or just US - your choice.
 if [[ "$1" =~ ^(([0-9]( |-))?[0-9]{3,3} +|([0-9]( |-))?\([0-9]{3,3}\) *)?[0-9]{3,3}( |-)[0-9]{4,4}$ ]]; then
+   echo "$1 is a valid phone number."
    return 0
-    else
+ else
+    # echo "$1 is not a valid phone number."
    return 1
    
 fi
@@ -120,8 +126,8 @@ else
         if [[ $1 =~ ^3[4,7][0-9]{5,}$ ]]; then
             echo "$1 - PROBABLE AMEX  (AMEX START WITH 34 or 37 and has 15 digits)"
         fi
-   else
-    echo "$1 - NOT AN ACEPTABLE CREDIT CARD NUMBER."
+#    else
+#     echo "$1 - NOT AN ACEPTABLE CREDIT CARD NUMBER."
   fi
  fi     
 }
