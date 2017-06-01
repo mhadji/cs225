@@ -42,24 +42,29 @@ clear
 
 #Credit card numbers	     	  
        	 if [ "$user_i" = "2" ];then
-             echo "Enter your Credit card number."
+             echo "Enter your Credit card number(all numbers, no spaces)."
              read  user_s 
              check_ccn $user_s
-            # if   (check_ccn $user_s );then 
-            #     echo "$user_s is a valid Credit card number."
-            # else
-            #      echo "$user_s is a not valid Credit card number."
-            # fi
-            
+                
          fi
 #telephone numbers
        if [ "$user_i" = "3" ];then
               echo "Enter your telephone number in this format(xxx)xxx-xxxx."
               read  user_s
               if   (check_pn $user_s );then 
-                echo "$user_s is a valid Credit card number."
+                echo "$user_s is a valid US phone number."
               else
-                 echo "$user_s is a not valid Credit card number."
+                 echo "$user_s is a not valid US phone number."
+              fi
+      fi
+#IP addresses
+       if [ "$user_i" = "4" ];then
+              echo "Enter your IP address."
+              read  user_s
+              if   (check_ip $user_s );then 
+                echo "$user_s is a valid IP addresses."
+              else
+                 echo "$user_s is a not valid IP addresses.IP must be between 0.0.0.0 and 255.255.255.255"
               fi
       fi
 #help

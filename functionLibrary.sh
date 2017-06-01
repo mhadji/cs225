@@ -61,7 +61,12 @@ echo "$2"
 ##################################################################
 check_ip(){
 # IP address should handle 0.0.0.0 to 255.255.255.255 but nothing else.
-echo $1
+if [[ "$1" =~ ^([0-9]|[1-9][0-9]|1([0-9][0-9])|2([0-4][0-9]|5[0-5]))\.([0-9]|[1-9][0-9]|1([0-9][0-9])|2([0-4][0-9]|5[0-5]))\.([0-9]|[1-9][0-9]|1([0-9][0-9])|2([0-4][0-9]|5[0-5]))\.([0-9]|[1-9][0-9]|1([0-9][0-9])|2([0-4][0-9]|5[0-5]))$ ]] ; then
+    return 0
+else
+   return 1
+fi
+}
 }
 
 ##################################################################
@@ -87,10 +92,9 @@ fi
 check_pn(){
 # Phone number can be international format or just US - your choice.
 if [[ "$1" =~ ^(([0-9]( |-))?[0-9]{3,3} +|([0-9]( |-))?\([0-9]{3,3}\) *)?[0-9]{3,3}( |-)[0-9]{4,4}$ ]]; then
-    echo "TELEPHONE NUMBER (USA)"
-    echo "is"$1
+   return 0
     else
-      echo "NOT"$1
+   return 1
    
 fi
 
@@ -100,24 +104,24 @@ fi
 # Argument:
 #   $1 ->credit card numbers
 ##################################################################
-check_ccn(){
-         cn=${1// /}
-         echo $cn
-if [[ $1 =~ ^[0-9]{16,16}|([0-9]{4,4} ?){4,4}$ ]]; then
-    echo "CREDIT CARD NUMBER"
-    # remove spaces from credit card number
   
-#    echo ""
-    if [[ $cn =~ ^4[0-9]{6,}$ ]]; then
-	echo "PROBABLE VISA CARD (VISA CARD START WITH 4)";
+check_ccn(){
+ ln=${#1}
+if [[ "$ln" -eq "16" && ($1 =~ ^4[0-9]{6,}$  || $1 =~ ^5[1,5][0-9]{5,}$) ]]; then
+    # echo ""
+    if [[ $1 =~ ^4[0-9]{6,}$ ]]; then
+	 echo "$1 - PROBABLE VISA CARD (VISA CARD START WITH 4 and has 16 digits) "
     fi
-    if [[ $cn =~ ^5[1-5][0-9]{5,}$ ]]; then
-	echo "PROBABLE MASTER CARD  (MASTER CARD START WITH 5)";
+    if [[ $1 =~ ^5[1,5][0-9]{5,}$ ]]; then
+	 echo "$1 - PROBABLE MASTER CARD  (MASTER CARD START WITH 51 0r 55 and has 16 digits) "
     fi
-    if [[ $cn =~ ^3[4-7][0-9]{5,}$ ]]; then
-	echo "PROBABLE AMEX  (AMEX START WITH 5)";
-    fi
-    else
-       echo "NOT A CREDIT CARD NUMBER"
-fi
+else
+   if [[ "$ln" -eq "15" && $1 =~ ^3[4,7][0-9]{5,}$ ]]; then
+        if [[ $1 =~ ^3[4,7][0-9]{5,}$ ]]; then
+            echo "$1 - PROBABLE AMEX  (AMEX START WITH 34 or 37 and has 15 digits)"
+        fi
+   else
+    echo "$1 - NOT AN ACEPTABLE CREDIT CARD NUMBER."
+  fi
+ fi     
 }
