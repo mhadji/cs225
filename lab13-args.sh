@@ -3,7 +3,6 @@
 # regular expressions to check the validity of email addresses, telephone numbers, IP addresses and credit card numbers 
 #based on each particular data format.
 
-
 #!/bin/bash
 
 # Each function will return a message and a 1 or 0 depending on the outcome of the comparison
@@ -20,7 +19,7 @@ checkPoints=( check_email check_ccn check_ip check_pn )
  for f in "${checkPoints[@]}"
    do
       if  ($f $1);then 
-          #echo ""          
+         :         
        fi       
  done  
       
