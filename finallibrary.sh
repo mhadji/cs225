@@ -11,6 +11,22 @@ ctrl_c(){
 }
 
 ##################################################################
+# Purpose: make list of files in directory
+# Arguments:
+#  directory full name
+##################################################################
+
+ list(){
+    #make list of files in finalfiles directory
+    #check if directory exists and has content
+    if find $1 -mindepth 1 -print -quit | grep -q .; then
+      LIST=$(find $1 -name "*.*")
+    
+    else
+     echo "original folder is empty or not exist."
+    fi
+}
+##################################################################
 # Purpose: get the Modified date from file's stats and extract $DAY and $MONTH portion
 # Arguments:
 #   $1 -> file name 

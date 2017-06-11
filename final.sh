@@ -18,16 +18,16 @@ source  finalLibrary.sh
 trap ctrl_c SIGINT SIGTERM
 #Copy or move each file to the appropriate directory 
 copy(){
-        #Getting modified timestamp of each file in timefiles
+        #Getting modified timestamp of each file in finalfiles
        #check if file exists
          if [ $(find  "$1") ];then
             DATE=$(stat -c%y  $1 )
-            ts $DATE # $MONTH and $DAY will be created in ts function
+            ts $DATE # $YEAR , $MONTH and $DAY will be created in ts function from last modified date on file
           if [ -z "$MONTH" ] && [ -z "$DAY" ] ;then
             echo "Somthing went wrong.No date found"
             exit
          else 
-          DIS=lab11/$MONTH/$DAY
+          DIS=final/$YEAR/$MONTH/$DAY
           mkdir -p $DIS
          fi
        else
@@ -43,38 +43,33 @@ copy(){
            mv $1 $DIS
            echo "move $1 to $DIS"  
         else 
-           echo "wrong"
+           echo "somthing went wrong"
            exit
         fi
     }
  
- list(){
-    #make list of files in timefiles directory
-    #check if directory exists and has content
-    if find "timefiles" -mindepth 1 -print -quit | grep -q .; then
-      LIST=$(find timefiles -name "*.*")
-    # echo $LIST >test.txt 
-    #loop through the items in timefiles and pass each line to copy function
-        for i in $LIST ;do
-            if [ "$1" = "-z" ];then
-            copy $i 0
-            else
-            copy $i 1
-            fi
-        done
-    else
-     echo "original folder is empty or not exist."
-    fi
-}
-
+ 
+  copyormove(){
+ #function list in library loop through the items in finalfiles folder and make $LIST
+  list finalfiles
+  for i in $LIST ;do
+      if [ "$1" = "-z" ];then
+        copy $i 0
+        # echo $i >> finallist.txt
+        else
+         copy $i 1
+            # echo $i >> finallist.txt
+        fi
+    done
+  }
 if [ -z "$1" ];then
    echo "No -f fource option. Copy each file to the appropriate directory."
-   list -z
+   copyormove -z
 fi
 
 while getopts ":f,:h" opt; do
    case "$opt" in
-      f)  confirm "Are you sure.All files will be moved ? Please Enter y for yes and n for no - "  list -f ;;      
+      f)  confirm "Are you sure.All files will be moved ? Please Enter y for yes and n for no - "  copyormove -f ;;      
       #moves each file to the appropriate directory if -f (force) is set
       h) myHelp "script name- $0" "Script creates a directory structure for the year,month and day in your home directory,copies or moves (if -f option passed) each file to the appropriate directory. it also renames the file including the camera make, model and the date the photo/video was taken.";;
            #-h - prints out a help message 
