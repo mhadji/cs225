@@ -11,8 +11,6 @@
    #if not append a counter to the end of the name.
 #Keep the current extension but change it to lowercase if necessary.
 
-
-
 #!/bin/bash
 source  finalLibrary.sh
 trap ctrl_c SIGINT SIGTERM
