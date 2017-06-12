@@ -17,33 +17,32 @@ ctrl_c(){
 ##################################################################
  
 copy(){
-      #check if file exists
-         if [ $(find  "$1") ];then
-            DATE=$(stat -c%y  $1 )
-            ts $DATE # $YEAR , $MONTH and $DAY will be created in ts function from last modified date on file
-          if [ -z "$MONTH" ] && [ -z "$DAY" ] ;then
-            echo "Somthing went wrong.No date found"
-            exit
-         else 
+#check if file exists
+  if [ $(find  "$1") ];then
+     DATE=$(stat -c%y  $1 )
+     ts $DATE # $YEAR , $MONTH and $DAY will be created in ts function from last modified date on file
+      if [ -z "$MONTH" ] && [ -z "$DAY" ] ;then
+          echo "Somthing went wrong.No date found"
+          exit
+      else 
           DIS=final/$YEAR/$MONTH/$DAY
           mkdir -p $DIS
-         fi
-       else
-            echo "$1 not found"
-       fi 
-    
-        if [ "$2" -eq 0 ];then
-            #Copy each file to the appropriate directory 
-            cp -r $1 $DIS
-            echo  "copy $1 to $DIS"
-        elif [ "$2" -eq 1 ];then
-           #moves each file to the appropriate directory if -f (force) is set
-           mv $1 $DIS
-           echo "move $1 to $DIS"  
-        else 
-           echo "somthing went wrong"
-           exit
-        fi
+      fi
+  else
+      echo "$1 not found"
+  fi 
+      if [ "$2" -eq 0 ];then
+        #Copy each file to the appropriate directory 
+        cp -r $1  $DIS
+        echo  "copy $1 to $DIS"
+      elif [ "$2" -eq 1 ];then
+        #moves each file to the appropriate directory if -f (force) is set
+        mv $1 $DIS
+        echo "move $1 to $DIS"  
+      else 
+        echo "somthing went wrong"
+        exit
+      fi
     }
  
 ##################################################################
@@ -57,11 +56,11 @@ copy(){
       if [ "$1" = "-z" ];then
         copy $i 0
         # echo $i >> finallist.txt
-        else
-         copy $i 1
+      else
+        copy $i 1
             # echo $i >> finallist.txt
-        fi
-    done
+      fi
+  done
   }
 
 
@@ -94,8 +93,25 @@ DAY=$(date -d "$1" '+%d')
 MONTH=$(date -d "$1" '+%m')
 YEAR=$(date -d "$1" '+%Y')
 fi
- echo $1
- echo $DAY
+#  echo $1
+#  echo $DAY
+# echo $MONTH
+}
+
+##################################################################
+# Purpose:  get the creation time, date and camera make/model from the embedded metadata data
+# Arguments:
+#   $1 -> file name 
+##################################################################
+
+ms() {  
+if [ ! -z "$1" ];then
+DAY=$(date -d "$1" '+%d')
+MONTH=$(date -d "$1" '+%m')
+YEAR=$(date -d "$1" '+%Y')
+fi
+#  echo $1
+#  echo $DAY
 # echo $MONTH
 }
 
