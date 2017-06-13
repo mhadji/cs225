@@ -89,13 +89,19 @@ copy(){
 
 ts() {  
 if [ ! -z "$1" ];then
-DAY=$(date -d "$1" '+%d')
-MONTH=$(date -d "$1" '+%m')
-YEAR=$(date -d "$1" '+%Y')
+day=$(date -d "$1" '+%d')
+month=$(date -d "$1" '+%m')
+year=$(date -d "$1" '+%Y')
+hour=$(date -d "$1" '+%H')
+minute=$(date -d "$1" '+%M')
+second=$(date -d "$1" '+%S')
 fi
-#  echo $1
-#  echo $DAY
-# echo $MONTH
+ echo $1
+ echo $DAY
+echo $MONTH
+echo $hour
+echo $minute
+echo $second
 }
 
 ##################################################################
@@ -105,14 +111,12 @@ fi
 ##################################################################
 
 ms() {  
-if [ ! -z "$1" ];then
-DAY=$(date -d "$1" '+%d')
-MONTH=$(date -d "$1" '+%m')
-YEAR=$(date -d "$1" '+%Y')
-fi
-#  echo $1
-#  echo $DAY
-# echo $MONTH
+IFS=': '
+     set $(exiv2 -g Exif.Image.DateTime -Pv "$f")
+     unset IFS
+     year=$1 month=$2 day=$3 hour=$4 minute=$5 second=$6
+     make=$(exiv2 -g Exif.Image.Make -Pv "$f")
+     model=$(exiv2 -g Exif.Image.Model -Pv "$f")
 }
 
 ##################################################################
