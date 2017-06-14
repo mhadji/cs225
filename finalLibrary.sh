@@ -48,22 +48,31 @@ copy(){
     if [ -z "$model" ] ;then
         model="Unknown"
     fi
-    #get the extention
-    ext=${1##*.}
-    #lower case
-    ext=${ext,,}
     DES="Photos/$year/$month/$day/"
-    NewFileName="$year-$month-${day}_${hour}-$minute-${second}_${make}-${model// /}.$ext"
-    echo "$DES"
-    echo "$NewFileName"
     mkdir -p $DES
+    #bulding file name
+    #get the extention and make it lower case
+    ext=${1##*.};ext=${ext,,}
+    #check file with same name exists and add postfix (-1,-2 etc) 
+    NewFileNameWithNoExt="$year-$month-${day}_${hour}-$minute-${second}_${make}-${model// /}"
+    if [ -f "$DES/$NewFileName" ];then 
+      postfix=$(find $DES -name "$NewFileNameWithNoExt*"|wc -l)
+      let postfix+1
+      postfix="-$postfix"
+    fi 
+        NewFileName="$NewFileNameWithNoExt$postfix.$ext"
+    # echo "$DES"
+    # echo "$NewFileName"
+   
+     
     if [ "$2" -eq 0 ];then
         #Copy each file to the appropriate directory 
-         echo " "
+        #  echo " "
          #echo "new name - $NewFileName"
          #echo "DES - $DES"
-        # cp -r $1 $NewFileName $DES
-        # echo  "copy $NewFileName to $DES"  
+      
+         cp -r "$1" "$DES/$NewFileName"
+         echo  "copy $NewFileName to $DES" 
     elif [ "$2" -eq 1 ];then
         #moves each file to the appropriate directory if -f (force) is set
         # mv $1 $NewFileName $DES
