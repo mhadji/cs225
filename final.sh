@@ -12,8 +12,9 @@
 #Keep the current extension but change it to lowercase if necessary.
 
 #!/bin/bash
-source  finalLibrary.sh
+source  finallibrary.sh
 trap ctrl_c SIGINT SIGTERM
+
 if [ -z "$1" ];then
     echo "No -f fource option. Copy each file to the appropriate directory."
     beforecopy -z
