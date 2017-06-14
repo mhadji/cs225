@@ -102,7 +102,7 @@ copy(){
               copy $i 0 ms
               # echo $i >> finallist.txt
             else
-              copy $i ms
+              copy $i 1 ms
                   # echo $i >> finallist.txt
             fi
           done    
@@ -156,12 +156,13 @@ fi
 ##################################################################
 
 ms() {  
+     f=$1
      IFS=': '
-     set $(exiv2 -g Exif.Image.DateTime -Pv "$1")
+     set $(exiv2 -g Exif.Image.DateTime -Pv "$f")
      unset IFS
      year=$1 month=$2 day=$3 hour=$4 minute=$5 second=$6
-     make=$(exiv2 -g Exif.Image.Make -Pv "$1")
-     model=$(exiv2 -g Exif.Image.Model -Pv "$1")
+     make=$(exiv2 -g Exif.Image.Make -Pv "$f")
+     model=$(exiv2 -g Exif.Image.Model -Pv "$f")
 }
 
 ##################################################################
