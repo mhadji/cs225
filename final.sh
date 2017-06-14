@@ -12,7 +12,7 @@
 #Keep the current extension but change it to lowercase if necessary.
 
 #!/bin/bash
-source  finallibrary.sh
+source  finalLibrary.sh
 trap ctrl_c SIGINT SIGTERM
 
 if [ -z "$1" ];then
