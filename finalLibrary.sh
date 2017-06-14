@@ -57,8 +57,12 @@ copy(){
     NewFileNameWithNoExt="$year-$month-${day}_${hour}-$minute-${second}_${make}-${model// /}"
     if [ -f "$DES/$NewFileName" ];then 
       postfix=$(find $DES -name "$NewFileNameWithNoExt*"|wc -l)
+      if [ $postfix -gt 0 ];then
       let postfix+1
       postfix="-$postfix"
+      else 
+      postfix=""
+      fi
     fi 
         NewFileName="$NewFileNameWithNoExt$postfix.$ext"
     # echo "$DES"
