@@ -18,27 +18,52 @@ ctrl_c(){
  
 copy(){
 #check if file exists
-  if [ $(find  "$1") ];then
-     DATE=$(stat -c%y  $1 )
-     ts $DATE # $YEAR , $MONTH and $DAY will be created in ts function from last modified date on file
-      if [ -z "$MONTH" ] && [ -z "$DAY" ] ;then
-          echo "Somthing went wrong.No date found"
-          exit
-      else 
-          DIS=final/$YEAR/$MONTH/$DAY
-          mkdir -p $DIS
-      fi
-  else
-      echo "$1 not found"
-  fi 
+  # if [ $(find  "$1") ];then
+  #    DATE=$(stat -c%y  $1 )
+  #    ts $DATE # $YEAR , $MONTH and $DAY will be created in ts function from last modified date on file
+  #     if [ -z "$MONTH" ] && [ -z "$DAY" ] ;then
+  #         echo "Somthing went wrong.No date found"
+  #         exit
+  #     else 
+  #         DES=final/$YEAR/$MONTH/$DAY
+  #         mkdir -p $DES
+  #     fi
+  # else
+  #     echo "$1 not found"
+  # fi 
+
+    if [ "$3" = "ts" ];then
+        DATE=$(stat -c%y  $1 )
+        ts "$DATE" # $year , $month and $day will be created in ts function from last modified date on file
+          if [ -z "$month" ] && [ -z "$day" ] ;then
+              echo "Somthing went wrong.No date found"
+              exit
+          else
+            :
+          fi
+    fi
+    if [ "$3" = "ms" ];then
+       ms "$1" # $year , $month and $day will be created in ms function(from metadata) 
+    fi
+        if [ -z "$make" ] ;then
+            make="Unknown"
+        fi
+        DES="Photos/$year/$month/$day/"
+        NewFileName="$year-$month-${day}_${hour}-$minute-${second}_${make}-${model// /}.jpg"
+        # echo "Photos/$year/$month/$day/"
+        #  echo "$year-$month-${day}_${hour}-$minute-${second}_${make}-${model// /}.jpg"
+        mkdir -p $DES
       if [ "$2" -eq 0 ];then
         #Copy each file to the appropriate directory 
-        cp -r $1  $DIS
-        echo  "copy $1 to $DIS"
+         echo " 1 - $1"
+         echo "new name - $NewFileName"
+         echo "DES - $DES"
+        # cp -r $1 $NewFileName $DES
+        # echo  "copy $NewFileName to $DES"
       elif [ "$2" -eq 1 ];then
         #moves each file to the appropriate directory if -f (force) is set
-        mv $1 $DIS
-        echo "move $1 to $DIS"  
+        mv $1 $NewFileName $DES
+        echo "move $NewFileName to $DES"  
       else 
         echo "somthing went wrong"
         exit
@@ -51,18 +76,38 @@ copy(){
 #  individual file name
 ##################################################################
  beforecopy(){
-  list finalfiles
-  for i in $LIST ;do
-      if [ "$1" = "-z" ];then
-        copy $i 0
-        # echo $i >> finallist.txt
-      else
-        copy $i 1
-            # echo $i >> finallist.txt
-      fi
-  done
+    if ! which exiv2 > /dev/null; then
+      echo "Obviously, exiv2 has not been installed therefore script cannot use file metadata.Do you want to use file Timestamp instead? Please Enter y for yes and n for no ."
+      read response
+        if [ "$response" = "y" ]; then
+          list finalfiles
+          for i in $LIST ;do
+            if [ "$1" = "-z" ];then
+              copy $i 0 ts
+              # echo $i >> finallist.txt
+            else
+              copy $i 1 ts
+                  # echo $i >> finallist.txt
+            fi
+          done
+        elif [ "$response" = "n" ]; then
+          echo "Good Bye"
+        else 
+          echo "Y or N allowed."
+        fi 
+    else
+    list finalfiles
+          for i in $LIST ;do
+            if [ "$1" = "-z" ];then
+              copy $i 0 ms
+              # echo $i >> finallist.txt
+            else
+              copy $i ms
+                  # echo $i >> finallist.txt
+            fi
+          done    
+    fi
   }
-
 
 
 ##################################################################
@@ -89,19 +134,19 @@ copy(){
 
 ts() {  
 if [ ! -z "$1" ];then
-day=$(date -d "$1" '+%d')
-month=$(date -d "$1" '+%m')
-year=$(date -d "$1" '+%Y')
-hour=$(date -d "$1" '+%H')
-minute=$(date -d "$1" '+%M')
-second=$(date -d "$1" '+%S')
+    day=$(date -d "$1" '+%d')
+    month=$(date -d "$1" '+%m')
+    year=$(date -d "$1" '+%Y')
+    hour=$(date -d "$1" '+%H')
+    minute=$(date -d "$1" '+%M')
+    second=$(date -d "$1" '+%S')
 fi
- echo $1
- echo $DAY
-echo $MONTH
-echo $hour
-echo $minute
-echo $second
+#  echo $1
+#  echo $DAY
+# echo $MONTH
+# echo $hour
+# echo $minute
+# echo $second
 }
 
 ##################################################################
@@ -111,7 +156,7 @@ echo $second
 ##################################################################
 
 ms() {  
-IFS=': '
+     IFS=': '
      set $(exiv2 -g Exif.Image.DateTime -Pv "$f")
      unset IFS
      year=$1 month=$2 day=$3 hour=$4 minute=$5 second=$6
