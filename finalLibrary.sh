@@ -33,8 +33,7 @@ copy(){
   # fi 
 
     if [ "$3" = "ts" ];then
-        DATE=$(stat -c%y  $1 )
-        ts "$DATE" # $year , $month and $day will be created in ts function from last modified date on file
+        ts "$1" # $year , $month and $day will be created in ts function from last modified date on file
           if [ -z "$month" ] && [ -z "$day" ] ;then
               echo "Somthing went wrong.No date found"
               exit
@@ -55,11 +54,13 @@ copy(){
         mkdir -p $DES
       if [ "$2" -eq 0 ];then
         #Copy each file to the appropriate directory 
-         echo " 1 - $1"
-         echo "new name - $NewFileName"
-         echo "DES - $DES"
+         echo " "
+         #echo "new name - $NewFileName"
+         #echo "DES - $DES"
         # cp -r $1 $NewFileName $DES
         # echo  "copy $NewFileName to $DES"
+        
+        
       elif [ "$2" -eq 1 ];then
         #moves each file to the appropriate directory if -f (force) is set
         mv $1 $NewFileName $DES
@@ -133,14 +134,15 @@ copy(){
 ##################################################################
 
 ts() {  
-if [ ! -z "$1" ];then
-    day=$(date -d "$1" '+%d')
-    month=$(date -d "$1" '+%m')
-    year=$(date -d "$1" '+%Y')
-    hour=$(date -d "$1" '+%H')
-    minute=$(date -d "$1" '+%M')
-    second=$(date -d "$1" '+%S')
-fi
+  fd=$(stat -c%y  $1 )
+  if [ ! -z "$fd" ];then
+    day=$(date -d "$fd" '+%d')
+    month=$(date -d "$fd" '+%m')
+    year=$(date -d "$fd" '+%Y')
+    hour=$(date -d "$fd" '+%H')
+    minute=$(date -d "$fd" '+%M')
+    second=$(date -d "$fd" '+%S')
+  fi
 #  echo $1
 #  echo $DAY
 # echo $MONTH
@@ -157,12 +159,27 @@ fi
 
 ms() {  
      f=$1
-     IFS=': '
-     set $(exiv2 -g Exif.Image.DateTime -Pv "$f")
-     unset IFS
-     year=$1 month=$2 day=$3 hour=$4 minute=$5 second=$6
-     make=$(exiv2 -g Exif.Image.Make -Pv "$f")
-     model=$(exiv2 -g Exif.Image.Model -Pv "$f")
+     unset make
+     unset model
+     md=$(exiv2 -g Exif.Image.DateTime -Pv "$f" 2>/dev/null )
+     make=$(exiv2 -g Exif.Image.Make -Pv "$f" 2>/dev/null )
+     model=$(exiv2 -g Exif.Image.Model -Pv "$f" 2>/dev/null )
+
+     if [[ -z "$md" ]];then
+       ts "$f"
+       echo $f
+       echo "from ts - " $year
+     else
+        IFS=': '
+       set $(exiv2 -g Exif.Image.DateTime -Pv "$f" 2>/dev/null )
+       year=$1 month=$2 day=$3 hour=$4 minute=$5 second=$6
+       unset IFS
+       echo $f
+       echo "from ms - " $year - $month
+
+     fi
+     echo "from out - " $year - $month -  $day -  $hour - $minute - $second - $make - $model
+  
 }
 
 ##################################################################
