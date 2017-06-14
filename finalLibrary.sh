@@ -157,11 +157,11 @@ fi
 
 ms() {  
      IFS=': '
-     set $(exiv2 -g Exif.Image.DateTime -Pv "$f")
+     set $(exiv2 -g Exif.Image.DateTime -Pv "$1")
      unset IFS
      year=$1 month=$2 day=$3 hour=$4 minute=$5 second=$6
-     make=$(exiv2 -g Exif.Image.Make -Pv "$f")
-     model=$(exiv2 -g Exif.Image.Model -Pv "$f")
+     make=$(exiv2 -g Exif.Image.Make -Pv "$1")
+     model=$(exiv2 -g Exif.Image.Model -Pv "$1")
 }
 
 ##################################################################
