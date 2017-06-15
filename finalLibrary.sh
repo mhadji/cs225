@@ -7,88 +7,115 @@
 #  No Argument
 ##################################################################
 ctrl_c(){
-        echo "** No CTRL-C allowed."
+        echo "Cleaning...."
+        rm -rf finalfiles
+        rm -rf Photos
+        tar -xvzf finalfiles.tar.gz
+        exit
 }
 
 ##################################################################
+# Purpose: bulding the name for new files and making directory
+# Arguments:2
+#  $1= individual file name , $2=ts or ms (using file's timestamp or metadata ) 
+
+##################################################################
+naming(){
+  if [ "$2" = "ts" ];then
+        ts "$1" # $year , $month and $day will be created in ts function from last modified date on file
+  fi  
+  if [ "$2" = "ms" ];then
+       ms "$1" # $year , $month and $day will be created in ms function(from metadata) 
+  fi
+  if [ -z "$year" ];then
+       echo "Somthing went wrong.No date found"
+       exit
+  fi  
+  if [ -z "$make" ];then
+       make="Unknown"
+  fi
+  if [ -z "$model" ];then
+        model="Unknown"
+  fi
+  #making directory
+  DES="Photos/$year/$month/$day/"
+  mkdir -p $DES
+  #bulding file name
+  NewFileNameWithNoExt="$year-$month-${day}_${hour}-$minute-${second}_${make}-${model// /}"
+  #get the extention and make it lower case
+  ext=${1##*.}
+  ext=${ext,,}
+  #check file with same name exists and add postfix (-1,-2 etc) 
+  NewFileNameWithExt="$NewFileNameWithNoExt.$ext"
+  
+  if [ -f "$DES/$NewFileNameWithExt" ];then 
+     hash1=$(md5sum $1 | awk '{print $1}')
+     hash2=$(md5sum $DES/$NewFileNameWithExt | awk '{print $1}')
+     echo $hash1
+     echo $hash2
+    if [[ "$hash1" = "$hash2" ]];then
+           echo "Files are the same."
+           unset pc
+    else
+      echo "Files are different."
+      #adding postfix (-1,-2 etc)
+      postfix=$(find $DES -name "$NewFileNameWithNoExt*"|wc -l)
+      if [ $postfix -gt 0 ];then
+         let postfix+1
+         postfix="-$postfix"
+      else 
+          postfix=""
+      fi
+       NewFileName="$NewFileNameWithNoExt$postfix.$ext"
+      #pc is permission to copy.null for no , 1 for yes.    
+      pc="1"
+    fi
+else
+      NewFileName="$NewFileNameWithExt"
+      #pc is permission to copy.null for no , 1 for yes.    
+      pc="1"
+fi  
+   
+}
+##################################################################
 # Purpose: Copy or move each file to the appropriate directory
-# Arguments:
-#  individual file name
+# Arguments:3
+# $1= individual file name ,$2 = cp or mv $3 = ts or ms (using file's timestamp or metadata ) 
 ##################################################################
  
 copy(){
-#check if file exists
-  # if [ $(find  "$1") ];then
-  #    DATE=$(stat -c%y  $1 )
-  #    ts $DATE # $YEAR , $MONTH and $DAY will be created in ts function from last modified date on file
-  #     if [ -z "$MONTH" ] && [ -z "$DAY" ] ;then
-  #         echo "Somthing went wrong.No date found"
-  #         exit
-  #     else 
-  #         DES=final/$YEAR/$MONTH/$DAY
-  #         mkdir -p $DES
-  #     fi
-  # else
-  #     echo "$1 not found"
-  # fi 
-
-    if [ "$3" = "ts" ];then
-        ts "$1" # $year , $month and $day will be created in ts function from last modified date on file
-    fi  
-    if [ "$3" = "ms" ];then
-       ms "$1" # $year , $month and $day will be created in ms function(from metadata) 
-    fi
-    if [ -z "$year" ] ;then
-       echo "Somthing went wrong.No date found"
-       exit
-    fi  
-    if [ -z "$make" ] ;then
-       make="Unknown"
-    fi
-    if [ -z "$model" ] ;then
-        model="Unknown"
-    fi
-    DES="Photos/$year/$month/$day/"
-    mkdir -p $DES
-    #bulding file name
-    #get the extention and make it lower case
-    ext=${1##*.};ext=${ext,,}
-    #check file with same name exists and add postfix (-1,-2 etc) 
-    NewFileNameWithNoExt="$year-$month-${day}_${hour}-$minute-${second}_${make}-${model// /}"
-    if [ -f "$DES/$NewFileName" ];then 
-      postfix=$(find $DES -name "$NewFileNameWithNoExt*"|wc -l)
-      if [ $postfix -gt 0 ];then
-      let postfix+1
-      postfix="-$postfix"
-      else 
-      postfix=""
-      fi
-    fi 
-        NewFileName="$NewFileNameWithNoExt$postfix.$ext"
-    # echo "$DES"
-    # echo "$NewFileName"
-   
-     
+  #pc is permission to copy.null for no , 1 for yes. value will be assgined by naming function.   
+   naming $1 $3 
+   echo "pc - " $pc
+  if [ "$pc" -eq 1 ];then
     if [ "$2" -eq 0 ];then
-        #Copy each file to the appropriate directory 
-        #  echo " "
-         #echo "new name - $NewFileName"
-         #echo "DES - $DES"
-      
+        #Copy each file to the appropriate directory  
          cp -r "$1" "$DES/$NewFileName"
-         echo  "copy $NewFileName to $DES" 
+        # Echo on the screen the current file being processed, the number of the current file and the total number of files.
+        # Example:  Copying file 1 of 2014 - file.jpg to Photos/2014/08/24/2014-8-24_8-30-16_Canon-S80-2.jpg
+       echo  "copying  $1 to $DES/$NewFileName" 
+        # Echo out a summary upon completion that includes
+        # The number of JPEGs copied/moved
+        # The number of JPEGs that were the same and not copied
+        # The number of movies copied/moved
+        # The number of movies that were the same and were not copied  
+        
     elif [ "$2" -eq 1 ];then
         #moves each file to the appropriate directory if -f (force) is set
-        # mv $1 $NewFileName $DES
-        echo "move $NewFileName to $DES"  
+        mv  "$1" "$DES/$NewFileName"
+        echo "moved $NewFileName to $DES"  
     else 
         echo "somthing went wrong"
         exit
-     fi
-    }
+    fi
+    echo "file copied/moved."
+  else 
+     echo "files were the same and not copied/moved."
+  fi    
+  }
  
 ##################################################################
-# Purpose: sen file for copy or move to copy function 
+# Purpose: check exiv2 is installed then send file for copy or move to copy function 
 # Arguments:
 #  individual file name
 ##################################################################
@@ -101,10 +128,8 @@ copy(){
           for i in $LIST ;do
             if [ "$1" = "-z" ];then
               copy $i 0 ts
-              # echo $i >> finallist.txt
             else
               copy $i 1 ts
-                  # echo $i >> finallist.txt
             fi
           done
         elif [ "$response" = "n" ]; then
@@ -117,11 +142,9 @@ copy(){
           for i in $LIST ;do
             if [ "$1" = "-z" ];then
               copy $i 0 ms
-              # echo $i >> finallist.txt
             else
               copy $i 1 ms
-                  # echo $i >> finallist.txt
-            fi
+                fi
           done    
     fi
   }
