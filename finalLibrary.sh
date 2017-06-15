@@ -45,19 +45,19 @@ naming(){
   #get the extention and make it lower case
   ext=${1##*.}
   ext=${ext,,}
-  #check file with same name exists and add postfix (-1,-2 etc) 
+  #check file with same name exists, if so add postfix (-1,-2 etc) 
   NewFileNameWithExt="$NewFileNameWithNoExt.$ext"
   
   if [ -f "$DES/$NewFileNameWithExt" ];then 
      hash1=$(md5sum $1 | awk '{print $1}')
      hash2=$(md5sum $DES/$NewFileNameWithExt | awk '{print $1}')
-     echo $hash1
-     echo $hash2
+    #  echo $hash1
+    #  echo $hash2
     if [[ "$hash1" = "$hash2" ]];then
-           echo "Files are the same."
-           unset pc
+       echo "$DES/$NewFileNameWithExt and $1 are the same. No file will move or copy."
+       unset pc
     else
-      echo "Files are different."
+      echo "$DES/$NewFileNameWithExt and $1 are NOT the same. File will move or copy with postfix."
       #adding postfix (-1,-2 etc)
       postfix=$(find $DES -name "$NewFileNameWithNoExt*"|wc -l)
       if [ $postfix -gt 0 ];then
@@ -86,20 +86,15 @@ fi
 copy(){
   #pc is permission to copy.null for no , 1 for yes. value will be assgined by naming function.   
    naming $1 $3 
-   echo "pc - " $pc
-  if [ "$pc" -eq 1 ];then
+   echo""
+   if [ "$pc" -eq 1 ];then
     if [ "$2" -eq 0 ];then
         #Copy each file to the appropriate directory  
          cp -r "$1" "$DES/$NewFileName"
         # Echo on the screen the current file being processed, the number of the current file and the total number of files.
         # Example:  Copying file 1 of 2014 - file.jpg to Photos/2014/08/24/2014-8-24_8-30-16_Canon-S80-2.jpg
        echo  "copying  $1 to $DES/$NewFileName" 
-        # Echo out a summary upon completion that includes
-        # The number of JPEGs copied/moved
-        # The number of JPEGs that were the same and not copied
-        # The number of movies copied/moved
-        # The number of movies that were the same and were not copied  
-        
+                
     elif [ "$2" -eq 1 ];then
         #moves each file to the appropriate directory if -f (force) is set
         mv  "$1" "$DES/$NewFileName"
@@ -120,18 +115,22 @@ copy(){
 #  individual file name
 ##################################################################
  beforecopy(){
+  
     if ! which exiv2  2>/dev/null; then
       echo "Obviously, exiv2 has not been installed therefore script cannot use file metadata.Do you want to use file Timestamp instead? Please Enter y for yes and n for no ."
       read response
         if [ "$response" = "y" ]; then
           list finalfiles
+           total="0"
           for i in $LIST ;do
             if [ "$1" = "-z" ];then
               copy $i 0 ts
             else
               copy $i 1 ts
             fi
-          done
+            let total+1
+            echo "end of loop- "$total
+            done
         elif [ "$response" = "n" ]; then
           echo "Good Bye"
         else 
@@ -144,9 +143,27 @@ copy(){
               copy $i 0 ms
             else
               copy $i 1 ms
-                fi
-          done    
+            fi
+            let total+1 
+          done  
+        
     fi
+ aftercopy $total
+    
+ }
+ aftercopy(){
+   # Echo out a summary upon completion that includes
+       # The number of total files processed. 
+        echo "Totally $1 files had processed."
+        # The number of JPEGs copied/moved
+        echo "$jpgCopied JPEGs copied/moved"
+        # The number of JPEGs that were the same and not copied
+         echo "$jpgNotCopied JPEGs copied/moved"
+        # The number of movies copied/moved
+         echo "$notjpgCopied  movies copied/moved"
+        # The number of movies that were the same and were not copied  
+         echo "$notjpgNotCopied  movies copied/moved"
+
   }
 
 
