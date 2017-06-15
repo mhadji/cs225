@@ -7,7 +7,7 @@
 #  No Argument
 ##################################################################
 ctrl_c(){
-        echo "Cleaning...."
+        echo "Cleaning..."
         rm -rf finalfiles
         rm -rf Photos
         tar -xvzf finalfiles.tar.gz
@@ -136,7 +136,8 @@ copy(){
 #  individual file name
 ##################################################################
  beforecopy(){
-    total="0"
+    totalProcssed="0"
+    total=$(find finalfiles -name "*.*" | wc -l)
     jpgTotal="0"
     movTotal="0"
     jpgCopied="0"
@@ -155,7 +156,7 @@ copy(){
             else
               copy $i 1 ts
             fi
-            let total++
+            let totalProcssed++
             done
         elif [ "$response" = "n" ]; then
           echo "Good Bye"
@@ -170,7 +171,7 @@ copy(){
             else
               copy $i 1 ms
             fi
-            let total++
+            let totalProcssed++
           done  
         
     fi
@@ -188,7 +189,7 @@ copy(){
        echo""
        echo "##################################################################"
        echo""
-       echo "Totally $total files had processed. $jpgTotal JPGs and $movTotal Movies."
+       echo "Totally $totalProcssed of $total files had processed.($jpgTotal JPGs and $movTotal Movies)"
        # The number of JPEGs copied/moved
        echo "$jpgCopied JPEGs copied/moved"
        # The number of JPEGs that were the same and not copied
@@ -197,7 +198,9 @@ copy(){
        echo "$notjpgCopied  movies copied/moved"
        # The number of movies that were the same and were not copied  
        echo "$notjpgNotCopied  movies NOT copied/moved"
+       echo""
        echo "##################################################################"
+       log
   }
 
 
@@ -295,5 +298,16 @@ echo "$1"
 echo "$2"
 }
 
+##################################################################
+# Purpose: Keep a log of what script copies/moves so you can refer to it later. This log stored in the users home directory and named final.log. Output of the log should have the date/time and the function eg. copied <source file path> to <destination file path>.
+
+# Arguments:1
+# $1 = message
+
+##################################################################
+log(){
+ logger -f final.log
+
+}
 
 

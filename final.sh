@@ -20,12 +20,15 @@ if [ -z "$1" ];then
     beforecopy -z
 fi
 
-while getopts ":f,:h" opt; do
+while getopts ":f,:h,:d" opt; do
    case "$opt" in
       f)  confirm "Are you sure.All files will be moved ? Please Enter y for yes and n for no - "  beforecopy -f ;;      
       #moves each file to the appropriate directory if -f (force) is set
-      h) myHelp "script name- $0" "Script creates a directory structure for the year,month and day in your home directory,copies or moves (if -f option passed) each file to the appropriate directory. it also renames the file including the camera make, model and the date the photo/video was taken.";;
+      h) myHelp "script name- $0" "Script creates a directory structure for the year,month and day in your home directory,copies or moves (if -f option passed) each file to the appropriate directory. it also renames the file including the camera make, model and the date the photo/video was taken.Option -d turns on debugging." ;;
            #-h - prints out a help message 
+      d) echo "Option -d turns on debugging" 
+        # -d - turns on debugging (set -x)
+          set -x;;
       \?) myHelp "You entered wrong argument. Here is some help you can use."
         bash $0 -h
         ;;    
