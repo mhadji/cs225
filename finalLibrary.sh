@@ -45,6 +45,12 @@ naming(){
   #get the extention and make it lower case
   ext=${1##*.}
   ext=${ext,,}
+  #count the numbers of extentions
+  if [ "$ext" = "jpg" ];then
+   let jpgTotal++
+  else
+   let movTotal++
+  fi
   #check file with same name exists, if so add postfix (-1,-2 etc) 
   NewFileNameWithExt="$NewFileNameWithNoExt.$ext"
   
@@ -56,12 +62,17 @@ naming(){
     if [[ "$hash1" = "$hash2" ]];then
        echo "$DES/$NewFileNameWithExt and $1 are the same. No file will move or copy."
        unset pc
+       if [ "$ext" = "jpg" ];then
+        let jpgNotCopied++
+        else
+        let notjpgNotCopied++
+       fi
     else
       echo "$DES/$NewFileNameWithExt and $1 are NOT the same. File will move or copy with postfix."
       #adding postfix (-1,-2 etc)
       postfix=$(find $DES -name "$NewFileNameWithNoExt*"|wc -l)
       if [ $postfix -gt 0 ];then
-         let postfix+1
+         let postfix++
          postfix="-$postfix"
       else 
           postfix=""
@@ -69,11 +80,21 @@ naming(){
        NewFileName="$NewFileNameWithNoExt$postfix.$ext"
       #pc is permission to copy.null for no , 1 for yes.    
       pc="1"
+      if [ "$ext" = "jpg" ];then
+        let jpgCopied++
+        else
+        let notjpgCopied++
+      fi
     fi
 else
       NewFileName="$NewFileNameWithExt"
       #pc is permission to copy.null for no , 1 for yes.    
       pc="1"
+      if [ "$ext" = "jpg" ];then
+        let jpgCopied++
+      else
+        let notjpgCopied++
+      fi
 fi  
    
 }
@@ -115,21 +136,26 @@ copy(){
 #  individual file name
 ##################################################################
  beforecopy(){
-  
+    total="0"
+    jpgTotal="0"
+    movTotal="0"
+    jpgCopied="0"
+    notjpgCopied="0"
+    jpgNotCopied="0"
+    notjpgNotCopied="0"
+
     if ! which exiv2  2>/dev/null; then
       echo "Obviously, exiv2 has not been installed therefore script cannot use file metadata.Do you want to use file Timestamp instead? Please Enter y for yes and n for no ."
       read response
         if [ "$response" = "y" ]; then
           list finalfiles
-           total="0"
-          for i in $LIST ;do
+            for i in $LIST ;do
             if [ "$1" = "-z" ];then
               copy $i 0 ts
             else
               copy $i 1 ts
             fi
-            let total+1
-            echo "end of loop- "$total
+            let total++
             done
         elif [ "$response" = "n" ]; then
           echo "Good Bye"
@@ -144,26 +170,34 @@ copy(){
             else
               copy $i 1 ms
             fi
-            let total+1 
+            let total++
           done  
         
     fi
- aftercopy $total
+ aftercopy 
     
  }
+ ##################################################################
+# Purpose: summary upon completion
+# Arguments:no
+#  
+##################################################################
  aftercopy(){
    # Echo out a summary upon completion that includes
        # The number of total files processed. 
-        echo "Totally $1 files had processed."
-        # The number of JPEGs copied/moved
-        echo "$jpgCopied JPEGs copied/moved"
-        # The number of JPEGs that were the same and not copied
-         echo "$jpgNotCopied JPEGs copied/moved"
-        # The number of movies copied/moved
-         echo "$notjpgCopied  movies copied/moved"
-        # The number of movies that were the same and were not copied  
-         echo "$notjpgNotCopied  movies copied/moved"
-
+       echo""
+       echo "##################################################################"
+       echo""
+       echo "Totally $total files had processed. $jpgTotal JPGs and $movTotal Movies."
+       # The number of JPEGs copied/moved
+       echo "$jpgCopied JPEGs copied/moved"
+       # The number of JPEGs that were the same and not copied
+       echo "$jpgNotCopied JPEGs Not copied/moved"
+       # The number of movies copied/moved
+       echo "$notjpgCopied  movies copied/moved"
+       # The number of movies that were the same and were not copied  
+       echo "$notjpgNotCopied  movies NOT copied/moved"
+       echo "##################################################################"
   }
 
 
@@ -199,12 +233,6 @@ ts() {
     minute=$(date -d "$fd" '+%M')
     second=$(date -d "$fd" '+%S')
   fi
-#  echo $1
-  # echo $DAY
-# echo $MONTH
-# echo $hour
-# echo $minute
-# echo $second
 }
 
 ##################################################################
