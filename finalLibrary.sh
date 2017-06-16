@@ -113,13 +113,13 @@ copy(){
         #Copy each file to the appropriate directory  
          cp -r "$1" "$DES/$NewFileName"
         # Echo on the screen the current file being processed, the number of the current file and the total number of files.
-        # Example:  Copying file 1 of 2014 - file.jpg to Photos/2014/08/24/2014-8-24_8-30-16_Canon-S80-2.jpg
-       echo  "copying  $1 to $DES/$NewFileName" 
-                
+         echo  "Copying  $1 to $DES/$NewFileName" 
+         log  "Copying  $1 to $DES/$NewFileName"  
     elif [ "$2" -eq 1 ];then
         #moves each file to the appropriate directory if -f (force) is set
         mv  "$1" "$DES/$NewFileName"
         echo "moved $NewFileName to $DES"  
+         log  "Copying  $1 to $DES/$NewFileName" 
     else 
         echo "somthing went wrong"
         exit
@@ -127,6 +127,7 @@ copy(){
     echo "file copied/moved."
   else 
      echo "files were the same and not copied/moved."
+     log  " $1 were the same and not copied/moved."  
   fi    
   }
  
@@ -144,6 +145,8 @@ copy(){
     notjpgCopied="0"
     jpgNotCopied="0"
     notjpgNotCopied="0"
+    #heder for log file
+    log "###############Script started at [$(date +"%d/%m/%Y %H:%M:%S")]###############"
 
     if ! which exiv2  2>/dev/null; then
       echo "Obviously, exiv2 has not been installed therefore script cannot use file metadata.Do you want to use file Timestamp instead? Please Enter y for yes and n for no ."
@@ -200,7 +203,7 @@ copy(){
        echo "$notjpgNotCopied  movies NOT copied/moved"
        echo""
        echo "##################################################################"
-       log
+       log  "Totally $totalProcssed of $total files had processed.($jpgTotal JPGs and $movTotal Movies)" 
   }
 
 
@@ -306,7 +309,15 @@ echo "$2"
 
 ##################################################################
 log(){
- logger -f final.log
+  #Get the users home directory from /etc/passwd
+  if [-f "/etc/passwd" ];then
+   userhome=$(awk -v uid=$UID -F":" '{ if($3==uid){print $6} }' /etc/passwd)
+   echo -n "[$(date +"%d/%m/%Y %H:%M:%S")] --> $1 " >> "$userhome/final.log" 
+   echo " " >> "$userhome/final.log"
+  else  
+   echo -n "[$(date +"%d/%m/%Y %H:%M:%S")] --> $1 " >> "final.log" 
+    echo " " >> "final.log"
+  fi
 
 }
 
