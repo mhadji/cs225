@@ -310,13 +310,13 @@ echo "$2"
 ##################################################################
 log(){
   #Get the users home directory from /etc/passwd
-  if [-f "/etc/passwd" ];then
+  if [ -f "/etc/passwd" ];then
    userhome=$(awk -v uid=$UID -F":" '{ if($3==uid){print $6} }' /etc/passwd)
    echo -n "[$(date +"%d/%m/%Y %H:%M:%S")] --> $1 " >> "$userhome/final.log" 
    echo " " >> "$userhome/final.log"
   else  
    echo -n "[$(date +"%d/%m/%Y %H:%M:%S")] --> $1 " >> "final.log" 
-    echo " " >> "final.log"
+   echo " " >> "final.log"
   fi
 
 }
