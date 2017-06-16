@@ -119,7 +119,7 @@ copy(){
         #moves each file to the appropriate directory if -f (force) is set
         mv  "$1" "$DES/$NewFileName"
         echo "moved $NewFileName to $DES"  
-         log  "Copying  $1 to $DES/$NewFileName" 
+        log  "Moving  $1 to $DES/$NewFileName" 
     else 
         echo "somthing went wrong"
         exit
